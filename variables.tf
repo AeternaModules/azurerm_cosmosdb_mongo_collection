@@ -32,7 +32,7 @@ EOT
     }))
     index = optional(object({
       keys   = list(string)
-      unique = optional(bool, false)
+      unique = optional(bool) # Default: false
     }))
   }))
 }
