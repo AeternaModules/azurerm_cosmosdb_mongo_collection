@@ -18,7 +18,7 @@ resource "azurerm_cosmosdb_mongo_collection" "cosmosdb_mongo_collections" {
   }
 
   dynamic "index" {
-    for_each = each.value.index != null ? [each.value.index] : []
+    for_each = each.value.index != null ? each.value.index : []
     content {
       keys   = index.value.keys
       unique = index.value.unique

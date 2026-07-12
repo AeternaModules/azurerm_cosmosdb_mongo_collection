@@ -30,27 +30,11 @@ EOT
     autoscale_settings = optional(object({
       max_throughput = optional(number)
     }))
-    index = optional(object({
+    index = optional(list(object({
       keys   = list(string)
       unique = optional(bool) # Default: false
-    }))
+    })))
   }))
-  validation {
-    condition = alltrue([
-      for k, v in var.cosmosdb_mongo_collections : (
-        v.shard_key == null || (length(v.shard_key) > 0)
-      )
-    ])
-    error_message = "must not be empty"
-  }
-  validation {
-    condition = alltrue([
-      for k, v in var.cosmosdb_mongo_collections : (
-        v.analytical_storage_ttl == null || (v.analytical_storage_ttl >= -1)
-      )
-    ])
-    error_message = "must be at least -1"
-  }
   # --- Unconfirmed validation candidates, derived from azurerm_cosmosdb_mongo_collection's provider source ---
   # Not auto-enabled: either a bespoke provider validator we can't safely translate,
   # or a path that crosses a list-typed block (needs its own for_each wrapping).
@@ -75,8 +59,14 @@ EOT
   #   source:    [from validate.CosmosAccountName] !matched
   # path: database_name
   #   source:    [from validate.CosmosEntityName] len(value) < 1 || len(value) > 255
+  # path: shard_key
+  #   condition: length(value) > 0
+  #   message:   must not be empty
   # path: default_ttl_seconds
   #   source:    validation.All(...) - no translation rule yet, add one
+  # path: analytical_storage_ttl
+  #   condition: value >= -1
+  #   message:   must be at least -1
   # path: throughput
   #   source:    [from validate.CosmosThroughput] value < 400
   # path: throughput
