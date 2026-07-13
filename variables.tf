@@ -32,7 +32,7 @@ EOT
     }))
     index = optional(list(object({
       keys   = list(string)
-      unique = optional(bool) # Default: false
+      unique = optional(bool)
     })))
   }))
   # --- Unconfirmed validation candidates, derived from azurerm_cosmosdb_mongo_collection's provider source ---
