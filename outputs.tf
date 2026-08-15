@@ -12,7 +12,7 @@ output "cosmosdb_mongo_collections_analytical_storage_ttl" {
 }
 output "cosmosdb_mongo_collections_autoscale_settings" {
   description = "Map of autoscale_settings values across all cosmosdb_mongo_collections, keyed the same as var.cosmosdb_mongo_collections"
-  value       = { for k, v in azurerm_cosmosdb_mongo_collection.cosmosdb_mongo_collections : k => v.autoscale_settings if v.autoscale_settings != null && length(v.autoscale_settings) > 0 }
+  value       = { for k, v in azurerm_cosmosdb_mongo_collection.cosmosdb_mongo_collections : k => one(v.autoscale_settings) if v.autoscale_settings != null && length(v.autoscale_settings) > 0 }
 }
 output "cosmosdb_mongo_collections_database_name" {
   description = "Map of database_name values across all cosmosdb_mongo_collections, keyed the same as var.cosmosdb_mongo_collections"
